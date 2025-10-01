@@ -9,6 +9,16 @@ class Lecture extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'title',
+        'type',
+        'section_id',
+        'content',
+        'video_path',
+        'thumbnail_path',
+        'duration_in_seconds',
+    ];
+
     public function section(): BelongsTo{
         return $this->belongsTo(Section::class);
     }   

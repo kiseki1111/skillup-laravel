@@ -64,6 +64,32 @@ services:
                 - ping
             retries: 3
             timeout: 5s
+
+    minio:
+        image: 'minio/minio:latest'
+        ports:
+            # Port API untuk diakses oleh Laravel
+            - '${FORWARD_MINIO_PORT:-9000}:9000'
+            # Port Web UI untuk Anda lihat di browser
+            - '${FORWARD_MINIO_CONSOLE_PORT:-9001}:9001'
+        environment:
+            # Kredensial untuk login ke MinIO
+            MINIO_ROOT_USER: 'sail'
+            MINIO_ROOT_PASSWORD: 'password'
+        volumes:
+            - 'sail-minio:/data'
+        networks:
+            - sail
+        command: server /data --console-address ":9001"
+        healthcheck:
+            test:
+                - CMD
+                - curl
+                - '-f'
+                - 'http://localhost:9000/minio/health/live'
+            retries: 3
+            timeout: 5s
+
 networks:
     sail:
         driver: bridge
@@ -71,4 +97,6 @@ volumes:
     sail-pgsql:
         driver: local
     sail-redis:
+        driver: local
+    sail-minio:
         driver: local
