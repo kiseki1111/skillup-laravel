@@ -16,35 +16,25 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         
                         @forelse ($courses as $course)
-                            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl ...">
                                 <!-- Bagian Gambar/Thumbnail -->
-                                <a href="#">
-                                    {{-- Untuk saat ini kita gunakan placeholder. Nanti kita akan ganti dengan thumbnail kursus. --}}
-                                    <img class="w-full h-48 object-cover" src="https://placehold.co/600x400/3498db/ffffff?text=SkillUp" alt="Course thumbnail">
+                                <!-- PERBAIKAN 1: Ganti href di sini -->
+                                <a href="{{ route('courses.show', $course) }}">
+                                    <img ...>
                                 </a>
 
                                 <!-- Bagian Konten Kartu -->
                                 <div class="p-4">
-                                    <h3 class="text-lg font-semibold mb-2 h-14 overflow-hidden">
-                                        <a href="#" class="hover:text-blue-600">{{ $course->title }}</a>
+                                    <h3 class="text-lg font-semibold ...">
+                                        <!-- PERBAIKAN 2: Ganti href di sini -->
+                                        <a href="{{ route('courses.show', $course) }}" class="hover:text-blue-600">{{ $course->title }}</a>
                                     </h3>
                                     
-                                    <p class="text-sm text-gray-600 mb-4">
-                                        By {{ $course->instructor->name ?? 'Unknown Instructor' }}
-                                    </p>
-
-                                    <div class="flex justify-between items-center">
-                                        <p class="text-lg font-bold text-blue-500">
-                                            Rp{{ number_format($course->price, 0, ',', '.') }}
-                                        </p>
-                                        {{-- Di sini nanti bisa ditambahkan rating bintang --}}
-                                    </div>
+                                    <!-- ... sisa konten kartu ... -->
                                 </div>
                             </div>
                         @empty
-                            <div class="col-span-1 sm:col-span-2 lg:col-span-3 text-center text-gray-500 py-10">
-                                <p>No courses available at the moment.</p>
-                            </div>
+                            <!-- ... -->
                         @endforelse
 
                     </div>

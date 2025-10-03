@@ -15,4 +15,10 @@ class CourseController extends Controller
         });
         return view('courses.index', compact('courses'));
     }
+
+    public function show(Course $course)
+    {
+        $course->load('instructor', 'sections.lectures');
+        return view ('courses.show', compact('course'));
+    }
 }
