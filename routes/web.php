@@ -9,14 +9,15 @@ use App\Http\Controllers\LearnController;
 use App\Http\Controllers\Instructor\CourseController as InstructorCourseController;
 use App\Http\Controllers\Instructor\SectionController;
 use App\Http\Controllers\Instructor\LectureController;
+use App\Http\Controllers\LectureCompletionController;
 
-// --- Public Routes ---
+// Public Routes
 Route::get('/', function () { return view('welcome'); });
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
 Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');
 
 
-// --- Authenticated User Routes ---
+// Authenticated User 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -26,16 +27,16 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // --- Student Specific Routes ---
+    //Student  
     Route::get('/my-courses', [MyCoursesController::class, 'index'])->name('student.courses.index');
     Route::post('/courses/{course}/enroll', [EnrollmentController::class, 'store'])->name('courses.enroll');
     Route::get('/learn/{course}', [LearnController::class, 'show'])->name('learn.show');
-    // === PERBAIKAN UTAMA DI SINI: '{courses}' menjadi '{course}' ===
     Route::get('/learn/{course}/lectures/{lecture}', [LearnController::class, 'getLectureContent'])->name('learn.lecture.content');
+    Route::post('/lectures/{lecture}/complete', [LectureCompletionController::class, 'store'])->name('lectures.complete');
 });
 
 
-// --- Role Specific Routes ---
+//Role Specific
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () { /* ... */ });
 Route::middleware(['auth', 'instructor'])->prefix('instructor')->name('instructor.')->group(function() {
     Route::get('/courses', [InstructorCourseController::class, 'index'])->name('courses.index');

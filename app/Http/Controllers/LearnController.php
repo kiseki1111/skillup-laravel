@@ -20,7 +20,26 @@ class LearnController extends Controller
 
         $course->load('sections.lectures');
 
-        return view('learn.show', compact('course'));
+        $completedLecturesArray = $user->completedLectures()
+                                    ->whereHas('section', function($query) use ($course){
+                                        $query->where('course_id', $course->id);
+                                    })
+                                    ->pluck('lecture_id')
+                                    ->toArray();
+
+        $totalLecturesCount = $course->lectures->count();
+        $completedLecturesCount = count($completedLecturesArray);
+        $progressPercentage = 0;
+        if ($progressPercentage > 0) {
+            $progressPercentage = round(($completedLecturesCount/$totalLecturesCount)*100);
+        }
+
+        return view('learn.show', compact(
+            'course',
+            'completedLecturesArray',
+            'progressPercentage',
+            'totalLecturesCount',
+        ));
     }
 
     public function getLectureContent(Course $course, Lecture $lecture)

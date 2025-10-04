@@ -37,6 +37,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Course::class, 'course_user', 'user_id', 'course_id');
     }
 
+    public function completedLectures():BelongsToMany
+    {
+        return $this->belongsToMany(Lecture::class, 'lecture_user', 'user_id', 'lecture_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -59,4 +64,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
 }
